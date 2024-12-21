@@ -1,45 +1,138 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router";
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "@/constants/Colors";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarShowLabel: false,
+        headerShadowVisible: false,
+        tabBarStyle: {
+          backgroundColor: COLORS.light.main,
+          height: 70,
+          elevation: 8,
+          alignItems: "center",
+          shadowColor: "red",
+          justifyContent: "center",
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.iconStyle}>
+              <Ionicons
+                name={focused ? "home" : "home-outline"}
+                color={focused ? COLORS.primary.main : COLORS.gray.lightGray}
+                size={30}
+              />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="activity"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Activity",
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                height: 50,
+                marginTop: 30,
+              }}
+            >
+              <Ionicons
+                name={focused ? "calendar-sharp" : "calendar-outline"}
+                color={focused ? COLORS.primary.main : COLORS.gray.lightGray}
+                size={30}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: "Search",
+          tabBarIcon: () => (
+            <LinearGradient
+              colors={[
+                `${COLORS.primary.main}`,
+                `${COLORS.primary.primaryVoilet}`,
+              ]}
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradientTextContainer}
+            >
+              <Ionicons name="search" color={"white"} size={40} />
+            </LinearGradient>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="photos"
+        options={{
+          title: "Photos",
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.iconStyle}>
+              <Ionicons
+                name={focused ? "camera" : "camera-outline"}
+                color={focused ? COLORS.primary.main : COLORS.gray.lightGray}
+                size={30}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.iconStyle}>
+              <Ionicons
+                name={focused ? "person" : "person-outline"}
+                color={focused ? COLORS.primary.main : COLORS.gray.lightGray}
+                size={30}
+              />
+            </View>
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  gradientTextContainer: {
+    padding: 10,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 90,
+    height: 90,
+    marginTop: -20,
+    backgroundColor: "white",
+    elevation: 1,
+    borderWidth:6,
+    borderColor:COLORS.light.main,
+  },
+  iconStyle: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 10,
+    height: 50,
+    marginTop: 20,
+  },
+});
